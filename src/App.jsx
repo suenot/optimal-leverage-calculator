@@ -319,7 +319,7 @@ function LeverageTable({ opt }) {
                     borderBottom: `1px solid ${C.border}`,
                   }}
                 >
-                  {l}\u00D7
+                  {l}×
                 </td>
                 <td
                   style={{
@@ -339,7 +339,7 @@ function LeverageTable({ opt }) {
                     borderBottom: `1px solid ${C.border}`,
                   }}
                 >
-                  {drag}\u00D7
+                  {drag}×
                 </td>
                 <td
                   style={{
@@ -447,7 +447,7 @@ function MaxDDTable() {
                       borderBottom: `1px solid ${C.border}`,
                     }}
                   >
-                    {lev.toFixed(1)}\u00D7
+                    {lev.toFixed(1)}×
                   </td>
                 );
               })}
@@ -734,7 +734,7 @@ export default function App() {
             </div>
 
             {/* Methods */}
-            <Section title="4 Methods → min()" icon="\uD83C\uDFAF">
+            <Section title="4 Methods → min()" icon="🎯">
               {R.methods.map((m) => (
                 <Bar
                   key={m.name}
@@ -799,7 +799,7 @@ export default function App() {
             </div>
 
             {/* Strategy inputs */}
-            <Section title="Strategy Parameters" icon="\uD83D\uDCCA">
+            <Section title="Strategy Parameters" icon="📊">
               <Slider
                 label="Win Rate"
                 value={wr}
@@ -836,7 +836,7 @@ export default function App() {
             </Section>
 
             {/* Risk inputs */}
-            <Section title="Risk Parameters" icon="\uD83D\uDEE1\uFE0F">
+            <Section title="Risk Parameters" icon="🛡️">
               <Slider
                 label="Daily Volatility"
                 value={dv}
@@ -873,7 +873,7 @@ export default function App() {
             </Section>
 
             {/* Constraints */}
-            <Section title="Constraints" icon="\u2699\uFE0F">
+            <Section title="Constraints" icon="⚙️">
               <Slider
                 label="Kelly Fraction"
                 value={kf}
@@ -902,16 +902,16 @@ export default function App() {
 
         {tab === "tables" && (
           <>
-            <Section title="Leverage, Liquidation & Volatility Drag" icon="\uD83D\uDCC9">
+            <Section title="Leverage, Liquidation & Volatility Drag" icon="📉">
               <LeverageTable opt={R.opt} />
             </Section>
 
-            <Section title="Max Leverage by Target Drawdown" icon="\uD83D\uDEE1\uFE0F">
+            <Section title="Max Leverage by Target Drawdown" icon="🛡️">
               <MaxDDTable />
               <div style={{ color: C.dim, fontSize: 11, marginTop: 10, lineHeight: 1.5 }}>
                 Formula: <code style={{ color: C.accent }}>L_max = D_max / VaR</code>
                 <br />
-                VaR(99%) \u2248 2.326 \u00D7 daily_vol (assuming normal distribution)
+                {"VaR(99%) \u2248 2.326 \u00D7 daily_vol (assuming normal distribution)"}
               </div>
             </Section>
           </>
@@ -919,7 +919,7 @@ export default function App() {
 
         {tab === "formulas" && (
           <>
-            <Section title="Core Formulas" icon="\uD83D\uDCD0">
+            <Section title="Core Formulas" icon="📐">
               <div
                 style={{
                   fontFamily: "monospace",
@@ -932,7 +932,7 @@ export default function App() {
                   <span style={{ color: C.accent, fontWeight: 700 }}>Kelly Leverage:</span>
                 </div>
                 <div style={{ paddingLeft: 16, color: C.text }}>
-                  L* = (p\u00B7W - (1-p)\u00B7L) / (W\u00B7L)
+                  {"L* = (p\u00B7W - (1-p)\u00B7L) / (W\u00B7L)"}
                 </div>
                 <div style={{ paddingLeft: 16, color: C.muted, fontSize: 11 }}>
                   Maximizes geometric growth rate
@@ -945,34 +945,34 @@ export default function App() {
                   L_max = D_max / VaR(99%)
                 </div>
                 <div style={{ paddingLeft: 16, color: C.muted, fontSize: 11 }}>
-                  VaR(99%) \u2248 2.326 \u00D7 \u03C3_daily
+                  {"VaR(99%) \u2248 2.326 \u00D7 \u03C3_daily"}
                 </div>
 
                 <div style={{ marginTop: 12 }}>
                   <span style={{ color: C.purple, fontWeight: 700 }}>Vol Targeting:</span>
                 </div>
                 <div style={{ paddingLeft: 16, color: C.text }}>
-                  L = \u03C3_target / \u03C3_annual
+                  {"L = \u03C3_target / \u03C3_annual"}
                 </div>
                 <div style={{ paddingLeft: 16, color: C.muted, fontSize: 11 }}>
-                  \u03C3_annual = \u03C3_daily \u00D7 \u221A252
+                  {"\u03C3_annual = \u03C3_daily \u00D7 \u221A252"}
                 </div>
 
                 <div style={{ marginTop: 12 }}>
                   <span style={{ color: C.red, fontWeight: 700 }}>Volatility Drag:</span>
                 </div>
                 <div style={{ paddingLeft: 16, color: C.text }}>
-                  drag = -\u00BD \u00D7 (L\u00B7\u03C3)\u00B2 \u00D7 days
+                  {"drag = -\u00BD \u00D7 (L\u00B7\u03C3)\u00B2 \u00D7 days"}
                 </div>
                 <div style={{ paddingLeft: 16, color: C.muted, fontSize: 11 }}>
-                  Drag scales with L\u00B2, not L
+                  {"Drag scales with L\u00B2, not L"}
                 </div>
 
                 <div style={{ marginTop: 12 }}>
                   <span style={{ color: C.green, fontWeight: 700 }}>Geometric Expectation:</span>
                 </div>
                 <div style={{ paddingLeft: 16, color: C.text }}>
-                  E_geo = (1+W\u00B7L)^p \u00D7 (1-L\u00B7L)^(1-p) - 1
+                  {"E_geo = (1+W\u00B7L)^p \u00D7 (1-L\u00B7L)^(1-p) - 1"}
                 </div>
 
                 <div
@@ -985,12 +985,12 @@ export default function App() {
                     fontSize: 13,
                   }}
                 >
-                  L_optimal = min(Kelly\u00D7f, DD, Vol, Exchange)
+                  {"L_optimal = min(Kelly\u00D7f, DD, Vol, Exchange)"}
                 </div>
               </div>
             </Section>
 
-            <Section title="Why min()?" icon="\uD83E\uDD14">
+            <Section title="Why min()?" icon="🤔">
               <div style={{ fontSize: 12, color: C.dim, lineHeight: 1.7 }}>
                 <p>
                   Each method provides a different upper bound on leverage.
