@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { kellyLev, geoExp, vDrag, recov } from "./calc.js";
 
 const C = {
   bg: "#0a0e17",
@@ -13,26 +14,6 @@ const C = {
   dim: "#94a3b8",
   muted: "#64748b",
 };
-
-function kellyLev(wr, W, L) {
-  if (W <= 0 || L <= 0) return 0;
-  return Math.max(0, (wr * W - (1 - wr) * L) / (W * L));
-}
-
-function geoExp(wr, W, L, lev) {
-  const wl = W * lev,
-    ll = L * lev;
-  if (ll >= 1) return -1;
-  return Math.pow(1 + wl, wr) * Math.pow(1 - ll, 1 - wr) - 1;
-}
-
-function vDrag(dv, lev, days = 252) {
-  return -0.5 * Math.pow(lev * dv, 2) * days;
-}
-
-function recov(pct) {
-  return pct >= 100 ? Infinity : (pct / (100 - pct)) * 100;
-}
 
 function Slider({ label, value, onChange, min, max, step, unit = "", color = C.accent, hint }) {
   return (
@@ -498,6 +479,7 @@ export default function App() {
   const [dv, setDv] = useState(4.0);
   const [mdd, setMdd] = useState(20);
   const [tv, setTv] = useState(25);
+  const [useVt, setUseVt] = useState(true);
   const [kf, setKf] = useState(0.5);
   const [exMax, setExMax] = useState(20);
   const [tab, setTab] = useState("calc");
@@ -513,7 +495,7 @@ export default function App() {
     const fk = kellyLev(w, W, L);
     const frac = fk * kf;
     const ddL = var99 > 0 ? mdd / 100 / var99 : Infinity;
-    const vtL = annVol > 0 ? tv / 100 / annVol : Infinity;
+    const vtL = useVt && annVol > 0 ? tv / 100 / annVol : Infinity;
 
     const methods = [
       {
@@ -564,7 +546,7 @@ export default function App() {
     const ml = opt * L * 100;
 
     return { methods, opt, fk, gC, dC, ge, dr, ml, annVol: annVol * 100 };
-  }, [wr, aW, aL, dv, mdd, tv, kf, exMax]);
+  }, [wr, aW, aL, dv, mdd, tv, useVt, kf, exMax]);
 
   const tabs = [
     { id: "calc", label: "Calculator" },
@@ -859,17 +841,32 @@ export default function App() {
                 color={C.red}
                 hint="Maximum acceptable drawdown"
               />
-              <Slider
-                label="Target Annual Vol"
-                value={tv}
-                onChange={setTv}
-                min={5}
-                max={100}
-                step={1}
-                unit="%"
-                color={C.purple}
-                hint="Target portfolio volatility (annual)"
-              />
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                  <input
+                    type="checkbox"
+                    checked={useVt}
+                    onChange={(e) => setUseVt(e.target.checked)}
+                    style={{ accentColor: C.purple, cursor: "pointer" }}
+                  />
+                  <span style={{ color: useVt ? C.dim : C.muted, fontSize: 13, fontWeight: 500 }}>
+                    Vol Targeting {!useVt && "(off)"}
+                  </span>
+                </div>
+                {useVt && (
+                  <Slider
+                    label="Target Annual Vol"
+                    value={tv}
+                    onChange={setTv}
+                    min={5}
+                    max={300}
+                    step={1}
+                    unit="%"
+                    color={C.purple}
+                    hint="Target portfolio volatility (annual)"
+                  />
+                )}
+              </div>
             </Section>
 
             {/* Constraints */}
